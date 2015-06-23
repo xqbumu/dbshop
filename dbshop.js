@@ -3,11 +3,16 @@ var app = {};
 	var $ = jQuery;
 	var tempData = [];
 	var proArr = []; //每个属性长度数组
-	var JP = $('.J_Prorow');
+
+	var Prorow = '.J_Prorow';
+	var checkbox = '.J_Checkbox';
+	var Jtable = '#J_table';
+	var JR = '.J_MapRow';
+	var JP = $(Prorow);
+
 	var thlen = 3;//表格列数
 
 	var init = function(){
-
 		//计算每个属性的位置;
 		proArr = countProRow();
 
@@ -24,7 +29,7 @@ var app = {};
 	var setTablePro = function(){
 		JP.each(function(){
 			var index = $(this).data('index');
-			$(this).find('.J_Checkbox:checked').each(function(){
+			$(this).find(checkbox + ':checked').each(function(){
 				var key = this.value;
 				var keyArr = key.split(':');
 
@@ -52,12 +57,12 @@ var app = {};
 
 			//插入HTML
 			if(indexId.length == 0 || idd>indexId[indexId.length-1]){
-				$('#template tbody').append(tr['tr']);
+				$(Jtable + ' tbody').append(tr['tr']);
 			}else if(idd<indexId[0]){
-				$('.J_MapRow').eq(0).before(tr['tr'])
+				$(JR).eq(0).before(tr['tr'])
 			}else{
 				num = countNum(idd,indexId)
-				$('.J_MapRow[data-id="'+num+'"]').after(tr['tr']);
+				$(JR + '[data-id="'+num+'"]').after(tr['tr']);
 			}
 			
 			
@@ -66,7 +71,6 @@ var app = {};
 		//合并表格
 		rowspanTd();
 		
-		//console.log(tr)
 	}
 	//合并表格
 	var rowspanTd = function(){
@@ -76,13 +80,10 @@ var app = {};
 			comArr = reduceArr(checkedlen);
 
 			if(comArr.length == 1) return;
-			//console.log($('.J_MapRow').length)
-			
-			//console.log(comArr)
-			$('.J_MapRow').each(function(index){
+
+			$(JR).each(function(index){
 
 				for(var i=comArr.length-2,j =0;i>=0;i--,j++){
-					//console.log(99999)
 					var rowTd = $(this).find('td');
 					
 					if((index+1)%comArr[i] == 1 || comArr[i] == 1){
@@ -110,7 +111,7 @@ var app = {};
 	var getChechedLen = function(){
 		var arr = [];
 		JP.each(function(){
-			var len = $(this).find('.J_Checkbox:checked').length;
+			var len = $(this).find(checkbox + ':checked').length;
 			arr.push(len);
 		});
 		return arr
@@ -119,7 +120,7 @@ var app = {};
 	var countProRow = function(){
 		var arr = [],tempArr = [];
 		JP.each(function(){
-			var len = $(this).find('.J_Checkbox').length;
+			var len = $(this).find(checkbox).length;
 			arr.push(len);
 		});
 
@@ -165,7 +166,7 @@ var app = {};
 	//trIndex([2,2,2]);
 	var getIndexTr = function(){
 		var arr = [];
-		$('.J_MapRow').each(function(){
+		$(JR).each(function(){
 			arr.push($(this).data('id'));
 		})
 		return arr;
@@ -238,7 +239,7 @@ var app = {};
 	 * @returns arr
 	 */
 	var doExchange = function (doubleArrays){
-	    var len=doubleArrays.length;
+	    var len = doubleArrays.length;
 
 	    if(len>=2){
 	        var len1=doubleArrays[0].length;
@@ -273,15 +274,14 @@ var app = {};
 	var delHmtl = function(self,index){
 		var key = self.value;
 		var keyStr = key.replace(':','-');
-		var inputObj = $(self).closest('ul').find('li').has('input:checked');
+		var inputObj = $(self).closest(Prorow).children().has('input:checked');
 		var li = $(self).parent();
 
 		var p = inputObj.eq(0).index();
 		var k = li.index();
 		var oldlen = thlen;
 
-		$('.J_MapRow[data-type*="'+keyStr+'"]').each(function(){
-			//console.log(prolen)
+		$(JR + '[data-type*="'+keyStr+'"]').each(function(){
 			if(index == 0){
 				$(this).remove();
 				return;
@@ -294,8 +294,6 @@ var app = {};
 				var t = '';
 					
 				for(var i = 0;i<index;i++){
-					//var len = $(this).find('td').length;
-					//console.log(thlen,len,i,index,oldlen)
 					if(thlen-len+i < index || len-oldlen-i > 0){
 						if(i == 0 ){
 							t = $(this).find('td').eq(i);
@@ -339,7 +337,6 @@ var app = {};
 	 * @returns arr
 	 */
 	var objData = function (self,index){
-		//console.log(tempData)
 		var data = [], //存储勾选属性
 			arrData = [],//存储生成表格数组
 			key = self.value,
@@ -360,7 +357,6 @@ var app = {};
 			}
 			 
 		}
-		//console.log(tempData)
 
 		var flag = _proLen();
 
@@ -368,14 +364,13 @@ var app = {};
 
 		//递归获取组合方式
 		var ret = doExchange(data);
-		//console.log(getChechedLen())
 		for(var i = 0; i<ret.length; i++){
 			var proObj = {},
 				retArr = ret[i].split('|');
 
 			for(var y = 0;y<retArr.length;y++){
 
-				var text = $('.J_Checkbox[value="'+retArr[y]+'"]').next().val();
+				var text = $(checkbox + '[value="'+retArr[y]+'"]').next().val();
 
 				proObj[retArr[y]] = {'type':'text','name':retArr[y],'text':text};
 
@@ -386,10 +381,8 @@ var app = {};
 			proObj['barcode'] = {'type':'input','name':'barcode'};
 
 			arrData.push(proObj);
-			//console.log(proObj)
 		}
 
-		//console.log(arrData)
 		return arrData;
 		
 
@@ -398,7 +391,6 @@ var app = {};
 	var editPro= function(self){
 		var proId = $(self).next();
 		var trId = '.J_map'+$(self).val().replace(':','-');
-		//console.log(trId)
 		var oldValue = proId.val();
 
 		proId.removeAttr('disabled');
@@ -425,59 +417,23 @@ var app = {};
 	var _proLen = function (){
 		var count = 0;
 		JP.each(function(){
-			var len = $(this).find('.J_Checkbox:checked').length;
+			var len = $(this).find(checkbox + ':checked').length;
 
 			if(len > 0) count++;
 		})
-		//console.log(prolen,count)
 
 		if(count == proArr.length) return true;
 
 		return false;
 	}
-	//图片上传DOM
-	var picDom = function(self){
-		var tr = document.createElement('tr');
-		var td1 = document.createElement('td');
-		var td2 = document.createElement('td');
-		var div = document.createElement('div');
-		var img = document.createElement('img');
 
-		td1.className = 'J_map'+$(self).val().replace(':','-')
-
-		var valtext = $(self).next().val();
-
-		td1.innerHTML = valtext;
-		div.className = 'btn-upload';
-		img.name = uploadImg;
-		img.src = '../img/lp/add100X100.jpg';
-
-		td2.appendChild(div);
-		div.appendChild(img);
-
-		tr.appendChild(td1);
-		tr.appendChild(td2);
-
-		$('#template2 tbody')[0].appendChild(tr);
-
-	}
-	//删除图片
-	var delPicDom = function(self){
-		var classId = 'J_map'+$(self).val().replace(':','-');
-		//console.log(classId)
-		$('#template2 tbody tr').each(function(){
-			if($(this).has('.'+classId).length>0){
-				$(this).remove();
-			}
-		})
-	}
 	//事件绑定
 	var _bindEvent = function (){
 
 		//勾选属性
-		$('.J_Checkbox').on('click',function(){
+		$(checkbox).on('click',function(){
 			var flag = _proLen();
-			var proId = $(this).closest('ul').data('index');
+			var proId = $(this).closest(Prorow).data('index');
 
 			if($(this).is(':checked')){
 				var obj = objData(this,proId);
@@ -492,41 +448,28 @@ var app = {};
 				delHmtl(this,proId);
 				bantPro(this);
 			}
-			//console.lod(data)
 					
 		});
-
-		//勾选颜色
-		$('.J_Checkbox[value^="sx1"]').on('click',function(){
-			if($(this).is(':checked')){
-				picDom(this);
-
-			}else{
-				delPicDom(this);
-			}		
-		})
-
 	}
 	
 	//获取JSON
 	var getJson = function(){
 		var shopArr = [];
 
-		$('.J_MapRow').each(function(){
+		$(JR).each(function(){
 			var tdId = $(this).find('[class^="J_map"]');
 			var obj = {};
 				obj['id'] = this.id || '';
 				tdId.each(function(){
 					var key = this.className.replace('J_map','');
 						key = key.split('-')[0];
-					//console.log(key)
+				
 					obj[key] = this.value?this.value:this.innerHTML;
 				});
 
 				shopArr.push(obj);
 
 		})
-		//console.log(JSON.stringify(shopArr))
 		return JSON.stringify(shopArr);
 
 	}
@@ -537,7 +480,6 @@ var app = {};
 	}
 
 	app.db = dbShop;
-	//window.dbShop = window.dbShop || dbShop;
 
 })(jQuery);
 
