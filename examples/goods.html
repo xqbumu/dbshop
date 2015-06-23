@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link href="http://libs.baidu.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+	<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+
+</head>
+<style>
+	body{
+		padding: 30px;
+	}
+	.row{
+		margin-bottom: 15px;
+	}
+</style>
+<body>
+<div class="container ">
+	<div class="row">
+		<div class="col-md-1">
+			<b>颜色：</b>
+		</div>
+		<div class="col-md-11 J_Prorow" data-index="0">
+			<label class="checkbox-inline">
+			  <input type="checkbox" class="J_Checkbox" value="sx1:1">
+			  <input type="text" value="军绿色" class="form-control" name="color" disabled="disabled">
+			</label>
+			<label class="checkbox-inline">
+				<input type="checkbox" class="J_Checkbox" value="sx1:2">
+				<input type="text" value="黑色" class="form-control" name="color" disabled="disabled">
+			</label>
+			<label class="checkbox-inline">
+			  	<input type="checkbox" class="J_Checkbox"  value="sx1:3">
+				<input type="text" value="天蓝色" class="form-control" name="color" disabled="disabled">
+			</label>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-1">
+			<b>尺码：</b>
+		</div>
+		<div class="col-md-11 J_Prorow" data-index="1">
+			<label class="checkbox-inline">
+			  <input type="checkbox" class="J_Checkbox" value="sx2:1">
+			  <input type="text" value="大" class="form-control" name="color" disabled="disabled">
+			</label>
+			<label class="checkbox-inline">
+				<input type="checkbox" class="J_Checkbox" value="sx2:2">
+				<input type="text" value="中" class="form-control" name="color" disabled="disabled">
+			</label>
+			<label class="checkbox-inline">
+			  	<input type="checkbox" class="J_Checkbox"  value="sx2:3">
+				<input type="text" value="小" class="form-control" name="color" disabled="disabled">
+			</label>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-1">
+			<b>风格：</b>
+		</div>
+		<div class="col-md-11 J_Prorow" data-index="2">
+			<label class="checkbox-inline">
+			  <input type="checkbox" class="J_Checkbox" value="sx3:1">
+			  <input type="text" value="萌萌" class="form-control" name="color" disabled="disabled">
+			</label>
+			<label class="checkbox-inline">
+				<input type="checkbox" class="J_Checkbox" value="sx3:2">
+				<input type="text" value="屌丝" class="form-control" name="color" disabled="disabled">
+			</label>
+			<label class="checkbox-inline">
+			  	<input type="checkbox" class="J_Checkbox"  value="sx3:3">
+				<input type="text" value="白富美" class="form-control" name="color" disabled="disabled">
+			</label>
+			<label class="checkbox-inline">
+			  	<input type="checkbox" class="J_Checkbox"  value="sx3:4">
+				<input type="text" value="高帅富" class="form-control" name="color" disabled="disabled">
+			</label>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-1">
+			<b>魅力：</b>
+		</div>
+		<div class="col-md-11 J_Prorow" data-index="3">
+			<label class="checkbox-inline">
+			  <input type="checkbox" class="J_Checkbox" value="sx4:1">
+			  <input type="text" value="大叔" class="form-control" name="color" disabled="disabled">
+			</label>
+			<label class="checkbox-inline">
+				<input type="checkbox" class="J_Checkbox" value="sx4:2">
+				<input type="text" value="萝莉" class="form-control" name="color" disabled="disabled">
+			</label>
+			<label class="checkbox-inline">
+			  	<input type="checkbox" class="J_Checkbox"  value="sx4:3">
+				<input type="text" value="小白" class="form-control" name="color" disabled="disabled">
+			</label>
+		</div>
+	</div>
+	<div class="row">
+		<table class="table table-bordered" id="J_table">
+			<thead>
+				<tr>
+					<th>颜色</th>
+					<th>尺码</th>
+					<th>风格</th>
+					<th>魅力</th>
+					<th>价格</th>
+					<th>数量</th>
+					<th>条码</th>
+				</tr>
+			</thead>
+			<tbody></tbody>
+		</table>
+	</div>
+</div>
+
+<script src="../dbshop.js"></script>
+</body>
+</html>
