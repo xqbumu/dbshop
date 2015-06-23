@@ -5,7 +5,7 @@
 
 * dbshop.js的主要功能就是勾选一个或多个商品属性，生成表格，依赖jQuery;
 * 属性可多可少，完全自适应;
-* 演示地址：[dbshop.js](http://runjs.cn/code/kuvsjt0a),也可查看示例，或下载到本地运行;
+* 演示地址：[dbshop.js](http://runjs.cn/detail/kuvsjt0a),也可查看示例，或下载到本地运行;
 
 #### 用法
 
