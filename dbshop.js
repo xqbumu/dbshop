@@ -271,7 +271,7 @@ var app = {};
 	 * @param  {this} self
 	 * @param  {number} index
 	 */
-	var delHmtl = function(self,index){
+	var delHmtl = function(self){
 		var key = self.value;
 		var keyStr = key.replace(':','-');
 		var inputObj = $(self).closest(Prorow).children().has('input:checked');
@@ -280,6 +280,8 @@ var app = {};
 		var p = inputObj.eq(0).index();
 		var k = li.index();
 		var oldlen = thlen;
+
+		var index = getIndex(self);
 
 		$(JR + '[data-type*="'+keyStr+'"]').each(function(){
 			if(index == 0){
@@ -319,29 +321,33 @@ var app = {};
 	/**
 	 * 删除勾选的数组属性
 	 *
-	 * @param  {this} self
-	 * @param  {number} index
+	 * @param  {this} self 勾选DOM
+	 * @param  {number} index 勾选属性类型
 	 */
-	var delObjData = function(self,index){
+	var delObjData = function(self){
 		
 		var key = self.value;
 		var keyArr = key.split(':');
+
+		var index = getIndex(self);
 
 		tempData[index].splice($.inArray(key,tempData[index]),1);
 	}
 	/**
 	 * 存储对象数据
 	 *
-	 * @param  {this} self
-	 * @param  {number} index
-	 * @returns arr
+	 * @param  {this} self 勾选DOM
+	 * @param  {number} index 勾选属性类型
+	 * @returns arr 返回生成每行表格的数据数组
 	 */
-	var objData = function (self,index){
+	var objData = function (self){
 		var data = [], //存储勾选属性
 			arrData = [],//存储生成表格数组
 			key = self.value,
 			keyArr = key.split(':'),
 			arr = [];//临时
+
+		var index = getIndex(self);
 
 		arr.push(key);
 		data[index] = arr;
@@ -351,7 +357,7 @@ var app = {};
 		}
 		tempData[index].push(key);
 
-		for(var i= 0; i < tempData.length;i++){
+		for(var i = 0; i < tempData.length;i++){
 			if(i != index){
 				data[i] = tempData[i];
 			}
@@ -388,7 +394,7 @@ var app = {};
 
 	}
 	//编辑修改属性
-	var editPro= function(self){
+	var editPro = function(self){
 		var proId = $(self).next();
 		var trId = '.J_map'+$(self).val().replace(':','-');
 		var oldValue = proId.val();
@@ -426,6 +432,10 @@ var app = {};
 
 		return false;
 	}
+	//获取勾选项类型
+	var getIndex = function(self){
+		return $(self).closest(Prorow).data('index');
+	}
 
 	//事件绑定
 	var _bindEvent = function (){
@@ -433,10 +443,9 @@ var app = {};
 		//勾选属性
 		$(checkbox).on('click',function(){
 			var flag = _proLen();
-			var proId = $(this).closest(Prorow).data('index');
 
 			if($(this).is(':checked')){
-				var obj = objData(this,proId);
+				var obj = objData(this);
 				editPro(this);
 
 				if(flag){
@@ -444,8 +453,8 @@ var app = {};
 				}
 
 			}else{
-				delObjData(this,proId);
-				delHmtl(this,proId);
+				delObjData(this);
+				delHmtl(this);
 				bantPro(this);
 			}
 					
