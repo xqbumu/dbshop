@@ -13,15 +13,18 @@ var app = {};
 	var thlen = 3;//表格列数
 
 	var init = function(){
-		//计算每个属性的位置;
-		proArr = countProRow();
+		//每列属性的长度
+		var arr = countProRow();
+		
+		//全部勾选组合方式数组
+		proArr = reduceArr(arr);
 
 		thlen += proArr.length;
 
-		//勾选时间绑定
+		//勾选事件绑定
 		_bindEvent();
 
-		//存储勾选属性
+		//初始化存储勾选属性
 		setTablePro();
 		
 	}
@@ -116,17 +119,15 @@ var app = {};
 		});
 		return arr
 	}
-
+	//每列属性的长度
 	var countProRow = function(){
-		var arr = [],tempArr = [];
+		var arr = [];
 		JP.each(function(){
 			var len = $(this).find(checkbox).length;
 			arr.push(len);
 		});
 
-		tempArr = reduceArr(arr);
-
-		return tempArr;
+		return arr
 	}
 	/**
 	 * 返回组合方式数组
