@@ -1,6 +1,5 @@
 var app = {};
-;(function (jQuery, undefined) {
-	var $ = jQuery;
+;(function ($, exports) {
 	var tempData = [];
 	var proArr = []; //每个属性长度数组
 
@@ -272,17 +271,17 @@ var app = {};
 	 * @param  {this} self
 	 * @param  {number} index
 	 */
-	var delHmtl = function(self){
-		var key = self.value;
+	var delHmtl = function(){
+		var key = this.value;
 		var keyStr = key.replace(':','-');
-		var inputObj = $(self).closest(Prorow).children().has('input:checked');
-		var li = $(self).parent();
+		var inputObj = $(this).closest(Prorow).children().has('input:checked');
+		var li = $(this).parent();
 
 		var p = inputObj.eq(0).index();
 		var k = li.index();
 		var oldlen = thlen;
 
-		var index = getIndex(self);
+		var index = getIndex.call(this);
 
 		$(JR + '[data-type*="'+keyStr+'"]').each(function(){
 			if(index == 0){
@@ -322,33 +321,42 @@ var app = {};
 	/**
 	 * 删除勾选的数组属性
 	 *
-	 * @param  {this} self 勾选DOM
 	 * @param  {number} index 勾选属性类型
 	 */
-	var delObjData = function(self){
+	var delObjData = function(){
 		
-		var key = self.value;
+		var key = this.value;
 		var keyArr = key.split(':');
 
-		var index = getIndex(self);
+		var index = getIndex.call(this);
 
 		tempData[index].splice($.inArray(key,tempData[index]),1);
 	}
 	/**
+	 * 深拷贝
+	 *
+	 * @param  {obj} obj 对象
+	 */
+	var deepClone = function(obj){
+
+		return JSON.parse(JSON.stringify(obj));
+	}
+	/**
 	 * 存储对象数据
 	 *
-	 * @param  {this} self 勾选DOM
 	 * @param  {number} index 勾选属性类型
 	 * @returns arr 返回生成每行表格的数据数组
 	 */
-	var objData = function (self){
+	var objData = function (){
 		var data = [], //存储勾选属性
 			arrData = [],//存储生成表格数组
-			key = self.value,
+			key = this.value,
 			keyArr = key.split(':'),
 			arr = [];//临时
 
-		var index = getIndex(self);
+		var index = getIndex.call(this);
+
+		data = deepClone(tempData);
 
 		arr.push(key);
 		data[index] = arr;
@@ -358,12 +366,6 @@ var app = {};
 		}
 		tempData[index].push(key);
 
-		for(var i = 0; i < tempData.length;i++){
-			if(i != index){
-				data[i] = tempData[i];
-			}
-			 
-		}
 
 		var flag = _proLen();
 
@@ -395,9 +397,9 @@ var app = {};
 
 	}
 	//编辑修改属性
-	var editPro = function(self){
-		var proId = $(self).next();
-		var trId = '.J_map'+$(self).val().replace(':','-');
+	var editPro = function(){
+		var proId = $(this).next();
+		var trId = '.J_map'+$(this).val().replace(':','-');
 		var oldValue = proId.val();
 
 		proId.removeAttr('disabled');
@@ -415,8 +417,8 @@ var app = {};
 
 	}
 	//禁止修改属性
-	var bantPro = function(self){
-		var proId = $(self).next();
+	var bantPro = function(){
+		var proId = $(this).next();
 		proId.attr('disabled','disabled');
 	}
 
@@ -434,8 +436,8 @@ var app = {};
 		return false;
 	}
 	//获取勾选项类型
-	var getIndex = function(self){
-		return $(self).closest(Prorow).data('index');
+	var getIndex = function(){
+		return $(this).closest(Prorow).data('index');
 	}
 
 	//事件绑定
@@ -446,17 +448,17 @@ var app = {};
 			var flag = _proLen();
 
 			if($(this).is(':checked')){
-				var obj = objData(this);
-				editPro(this);
+				var obj = objData.call(this);
+				editPro.call(this);
 
 				if(flag){
 					_addTbtr(obj);
 				}
 
 			}else{
-				delObjData(this);
-				delHmtl(this);
-				bantPro(this);
+				delObjData.call(this);
+				delHmtl.call(this);
+				bantPro.call(this);
 			}
 					
 		});
@@ -489,8 +491,8 @@ var app = {};
 		getJson: getJson
 	}
 
-	app.db = dbShop;
+	exports.db = dbShop;
 
-})(jQuery);
+})(jQuery,app);
 
 app.db.init();
